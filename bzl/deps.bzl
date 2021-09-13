@@ -1,3 +1,4 @@
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 
@@ -11,13 +12,37 @@ def okapi_deps():
         ],
         sha256 = "97e70364e9249702246c0e9444bccdc4b847bed1eb03c5a3ece4f83dfe6abc44",
     )
+
+    ################  OBazl 2 ###############
     maybe(
-        http_archive,
-        name = "obazl_rules_ocaml",
-        strip_prefix = "rules_ocaml-ad4c5562fb4a3cade5764129d61d4e2f6fdf77ac",
-        url = "https://github.com/tek/rules_ocaml/archive/ad4c5562fb4a3cade5764129d61d4e2f6fdf77ac.tar.gz",
-        sha256 = "5df21041e154d3f1e6914779862cf1843d6e7364fdcb72306441a22ced3147b8",
+        git_repository,
+        name = "obazl_tools_obazl",
+        remote = "https://github.com/obazl/tools_obazl",
+        branch = "dev",
     )
+
+    # maybe(
+    #     git_repository,
+    #     name = "obazl_tools_opam",
+    #     remote = "https://github.com/obazl/tools_opam",
+    #     branch = "nocamlfind",
+    # )
+
+    maybe(
+        git_repository,
+        name = "obazl_rules_ocaml",
+        remote = "https://github.com/obazl/rules_ocaml",
+        branch = "nocamlfind",
+    )
+    # maybe(
+    #     http_archive,
+    #     name = "obazl_rules_ocaml",
+    #     strip_prefix = "rules_ocaml-ad4c5562fb4a3cade5764129d61d4e2f6fdf77ac",
+    #     url = "https://github.com/tek/rules_ocaml/archive/ad4c5562fb4a3cade5764129d61d4e2f6fdf77ac.tar.gz",
+    #     sha256 = "5df21041e154d3f1e6914779862cf1843d6e7364fdcb72306441a22ced3147b8",
+    # )
+
+    ################ TWEAG ################
     maybe(
         http_archive,
         name = "io_tweag_rules_nixpkgs",
