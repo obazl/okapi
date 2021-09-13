@@ -1,7 +1,8 @@
-/bazel-bin
-/bazel-okapi
-/bazel-out
-/bazel-testlogs
+.obazl.d/codept.*
+*.history.txt
+*.log
+
+/bazel-*
 /bazel/
 /test/*/bazel-*
 /test/*/bazel/

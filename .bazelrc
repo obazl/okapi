@@ -1,3 +1,7 @@
-try-import %workspace%/.bazelrc.local
-startup --output_base bazel/out
-test --test_output=errors
+common --color=yes
+
+build:dbg --subcommands=pretty_print
+build:dbg --verbose_failures
+common:dbg -c dbg
+
+try-import .private/user.bazelrc
