@@ -1,84 +1,85 @@
-load("@obazl_rules_ocaml//ocaml:rules.bzl", "ocaml_lex", "ocaml_module", "ocaml_ns_library", "ocaml_signature", "ppx_executable", "ppx_module", "ppx_ns_library")
+load("@obazl_rules_ocaml//ocaml:rules.bzl", "ocaml_lex", "ocaml_module", "ocaml_ns_archive", "ocaml_signature", "ppx_executable", "ppx_module", "ppx_ns_archive")
 
 ocaml_module(
     name = "final",
-    deps_opam = [
-        "angstrom",
-        "re",
-        "ipaddr",
-    ],
     opts = [
         "-open",
         "Angstrom",
     ],
     struct = ":final.ml",
+    deps = [
+        "@opam//lib/angstrom",
+        "@opam//lib/ipaddr",
+        "@opam//lib/re",
+    ],
 )
 
 ocaml_lex(
     name = "lexy_ml",
     src = ":lexy.mll",
+    out = ":lexy.ml",
 )
 
 ocaml_module(
     name = "lexy",
-    deps_opam = [
-        "angstrom",
-        "re",
-        "ipaddr",
-    ],
     opts = [
         "-w",
         "-39",
     ],
     struct = ":lexy_ml",
-)
-
-ocaml_module(
-    name = "sub",
-    deps_opam = [
-        "angstrom",
-        "re",
-        "ipaddr",
+    deps = [
+        "@opam//lib/angstrom",
+        "@opam//lib/ipaddr",
+        "@opam//lib/re",
     ],
-    opts = [
-        "-open",
-        "Angstrom",
-    ],
-    struct = ":sub.ml",
 )
 
 ocaml_signature(
-    name = "new_sig",
+    name = "new__sig",
     src = ":new.mli",
-    deps_opam = [
-        "angstrom",
-        "re",
-        "ipaddr",
-    ],
     opts = [
         "-open",
         "Angstrom",
+    ],
+    deps = [
+        "@opam//lib/angstrom",
+        "@opam//lib/ipaddr",
+        "@opam//lib/re",
     ],
 )
 
 ocaml_module(
     name = "new",
-    deps_opam = [
-        "angstrom",
-        "re",
-        "ipaddr",
-    ],
     opts = [
         "-open",
         "Angstrom",
     ],
-    sig = ":new_sig",
+    sig = ":new__sig",
     struct = ":new.ml",
+    deps = [
+        "@opam//lib/angstrom",
+        "@opam//lib/ipaddr",
+        "@opam//lib/re",
+    ],
+)
+
+ocaml_module(
+    name = "sub",
+    opts = [
+        "-open",
+        "Angstrom",
+    ],
+    struct = ":sub.ml",
+    deps = [
+        "@opam//lib/angstrom",
+        "@opam//lib/ipaddr",
+        "@opam//lib/re",
+    ],
 )
 
 # okapi:auto
 # okapi:public_name sub-lib
-ocaml_ns_library(
+ocaml_ns_archive(
     name = "#Sub_lib",
     submodules = [
         ":final",
@@ -96,52 +97,48 @@ ppx_executable(
 
 ppx_module(
     name = "bar",
-    deps_opam = [
-        "virt",
-        "ppx_inline_test",
-    ],
     ppx = ":ppx_sub_extra_lib",
     ppx_print = "@ppx//print:text",
     ppx_tags = ["inline-test"],
     struct = ":bar.ml",
-    deps = ["@okapi-test//a:#A"],
+    deps = [
+        "@okapi-test//a:#A",
+        "@opam//lib/ppx_inline_test",
+        "@opam//lib/virt",
+    ],
 )
 
 ocaml_signature(
-    name = "foo_sig",
+    name = "foo__sig",
     src = ":foo.mli",
-    deps_opam = [
-        "virt",
-        "ppx_inline_test",
-    ],
     ppx = ":ppx_sub_extra_lib",
     ppx_print = "@ppx//print:text",
     ppx_tags = ["inline-test"],
     deps = [
         ":bar",
         "@okapi-test//a:#A",
+        "@opam//lib/ppx_inline_test",
+        "@opam//lib/virt",
     ],
 )
 
 ppx_module(
     name = "foo",
-    deps_opam = [
-        "virt",
-        "ppx_inline_test",
-    ],
     ppx = ":ppx_sub_extra_lib",
     ppx_print = "@ppx//print:text",
     ppx_tags = ["inline-test"],
-    sig = ":foo_sig",
+    sig = ":foo__sig",
     struct = ":foo.ml",
     deps = [
         ":bar",
         "@okapi-test//a:#A",
+        "@opam//lib/ppx_inline_test",
+        "@opam//lib/virt",
     ],
 )
 
 # okapi:public_name sub-extra-lib
-ppx_ns_library(
+ppx_ns_archive(
     name = "#Sub_extra_lib",
     submodules = [
         ":bar",

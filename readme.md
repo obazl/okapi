@@ -30,7 +30,9 @@ okapi_deps()
 
 # Configure default toolchains
 load("@okapi//bzl:setup.bzl", "okapi_setup")
-okapi_setup()
+okapi_setup(
+   ## nix_support = False  ## uncomment if not using nix
+)
 
 # This is the standard OBazl setup, requires an existing OPAM repository with the switch and compiler specified here
 load("@obazl_rules_ocaml//ocaml:providers.bzl", "BuildConfig", "OpamConfig")
@@ -94,7 +96,16 @@ Now build files for directories containing OCaml sources will be generated when 
 bazel run //:gazelle
 ```
 
-This repository contains an example project in `test/project-1`.
+## examples
+
+This repository contains an example project in `test/project-1`. It
+has the following OPAM dependencies, which you can install by e.g.
+`opam install ipaddr`. Note that you must run `bazel clean --expunge`
+after installing OPAM packages.
+
+* angstrom
+* ipaddr
+
 Build generation can be observed in action by running the following command in that directory:
 
 ```sh
