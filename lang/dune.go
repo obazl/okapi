@@ -326,7 +326,8 @@ func moduleSources(names []string, sources Deps, choices []Source) []Source {
     } else if src, exists := sources[untitlecase(name)]; exists {
       result = append(result, src)
     } else if !isChoice(name, choices) {
-      log.Fatalf("Library refers to unknown source `%s`.", name)
+      // log.Fatalf("Library refers to unknown source `%s`.", name)
+      log.Print("Library refers to unknown source `%s`.", name)
     }
   }
   final := append(result, choices...)

@@ -3,6 +3,7 @@ package okapi
 import (
   "fmt"
   "log"
+  "strings"
 
   "github.com/bazelbuild/bazel-gazelle/config"
   "github.com/bazelbuild/bazel-gazelle/label"
@@ -53,7 +54,7 @@ func libraryDeps(
   findDep := func (dep string) interface{} { return resolveDep(c, ix, dep) }
   virt, _ := ruleConfig(r, "implements")
   var locals []string
-  var opams []string
+  // var opams []string
   if deps, isStrings := imports.([]string); isStrings {
     for _, dep := range deps {
       resolved := findDep(dep)
@@ -61,14 +62,18 @@ func libraryDeps(
         if virt == dep {
           r.SetAttr("implements", local.label.String())
         } else {
-          locals = append(locals, local.label.String())
+		locals = append(locals,
+			strings.Replace(local.label.String(),
+				".", "/", -1))
         }
       } else if _, isOpam := resolved.(ResolvedOpam); isOpam {
-        opams = append(opams, dep)
+        // opams = append(opams, dep)
+	      locals = append(locals, "@ocaml//lib/" +
+		      strings.Replace(dep, ".", "/", -1))
       }
     }
     extendAttr(r, "deps", locals)
-    extendAttr(r, "deps_opam", opams)
+    // extendAttr(r, "deps_opam", opams)
   } else {
     log.Fatalf("Invalid type for imports of source file %s: %#v", r.Name(), imports)
   }

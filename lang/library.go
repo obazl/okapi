@@ -219,6 +219,7 @@ func lexRules(component Component, src Source, deps []string) []RuleResult {
   structName := src.name + "_ml"
   lexRule := rule.NewRule("ocaml_lex", structName)
   lexRule.SetAttr("src", ":" + src.name + ".mll")
+  lexRule.SetAttr("out", ":" + src.name + ".ml")
   modRule := moduleRule(component, src, ":" + structName, deps)
   modRule.rule.SetAttr("opts", []string{"-w", "-39"})
   return []RuleResult{{lexRule, nil}, modRule}
